@@ -2,6 +2,7 @@
 
 """
 
+from pandas.core.frame import DataFrame
 import streamlit as st
 import logging
 from processing import infer_only_meta
@@ -33,12 +34,14 @@ def file_check(uploaded_file):
 
             if file_details["FileType"]!="text/csv":
                 st.write("Please enter correct file type.")
-                
+
+def convert_df(df):
+    return df.to_csv().encode('utf-8')         
 
 
 st.title("Case predictor🔎")
 
-html = """
+html = """ 
 <style>
     .element-container {
       padding:20px;
@@ -57,5 +60,5 @@ col2.markdown(html, unsafe_allow_html=True)
 if col2.button("Analyse"):
     logging.info("Analyse called.")
     data_frame = analyse(user_upload)
-
-st.line_chart(data_frame)
+    st.line_chart(data_frame)
+    st.download_button(label="Download", data=convert_df(data_frame), file_name="predictions.csv", mime='text/csv')
