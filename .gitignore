@@ -1,1 +1,3 @@
 .DS_Store
+predictions.csv
+__pycache__
